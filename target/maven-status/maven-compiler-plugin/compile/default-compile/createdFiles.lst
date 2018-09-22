@@ -1,0 +1,7 @@
+com\example\ui\GetHomeRoute.class
+com\example\appl\GameCenter.class
+com\example\ui\PostGuessRoute.class
+com\example\ui\WebServer.class
+com\example\Application.class
+com\example\model\GuessGame.class
+com\example\ui\GetGameRoute.class
