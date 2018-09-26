@@ -17,6 +17,7 @@ public class GuessGame {
    * The upper bound on the numbers to be guessed. This is public so that other
    * components to read it; especially for unit testing.
    */
+
   public static final int UPPER_BOUND = 10;
 
   /**
@@ -27,6 +28,7 @@ public class GuessGame {
 
   private static final Random RANDOM = new Random();
 
+  public static int GamesWonTotal = 0;
   //
   // Attributes
   //
@@ -109,6 +111,8 @@ public class GuessGame {
     }
     //
     howManyGuessesLeft--;
+    //if its the right guess, increase the total of games won by all users
+    if (myGuess == numberToGuess) GamesWonTotal++;
     return myGuess == numberToGuess;
   }
 
@@ -128,6 +132,16 @@ public class GuessGame {
    */
   public synchronized int guessesLeft() {
     return howManyGuessesLeft;
+  }
+
+    /**
+     * Queries if the user guess is higher or lower than the expected number.
+     *
+     * @return higher or lower hint
+     */
+  public synchronized String provideHint (int myGuess) {
+    if (myGuess < numberToGuess) return "The number is higher than your guess";
+    else return "The number is lower than your guess";
   }
 
   /**

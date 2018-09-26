@@ -34,6 +34,8 @@ public class GetHomeRoute implements TemplateViewRoute {
   static final String TITLE = "Welcome to the Guessing Game";
   static final String VIEW_NAME = "home.ftl";
 
+  //to display game stats of the session
+  static final String GAME_SESSION_AVG_STATS_ATTR = "gameAverageStats";
   //
   // Attributes
   //
@@ -71,6 +73,10 @@ public class GetHomeRoute implements TemplateViewRoute {
 
     // report application-wide game statistics
     vm.put(GAME_STATS_MSG_ATTR, gameCenter.getGameStatsMessage());
+
+    //Send 0 since no games have been played for the session
+    //(still gets executed when opening game on new tabs and the amount of games already won on that session might not be 0. But it gets updated later
+    vm.put(GAME_SESSION_AVG_STATS_ATTR, gameCenter.getGameAverageMessage(0));
 
     // if this is a brand new browser session
     if (httpSession.isNew()) {

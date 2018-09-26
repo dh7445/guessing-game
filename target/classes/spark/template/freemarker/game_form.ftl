@@ -13,7 +13,9 @@
       <#if message??>
       <div class="message ${messageType}">${message}</div>
       </#if>
-      
+      <#if hint??>
+          <div class="message hint">${hint}</div>
+      </#if>
       <form action="./guess" method="POST">
         Guess a number between 0 and 9. You have ${guessesLeft} guess<#if
 guessesLeft gt 1>es</#if> left.

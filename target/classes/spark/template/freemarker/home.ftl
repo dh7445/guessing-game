@@ -13,7 +13,9 @@
       <p>
         ${gameStatsMessage}
       </p>
-      
+        <p>
+        ${gameAverageStats}
+        </p>
       <#if newSession>
         <p>
           <a href="/game">Want to play a game?!?</a>

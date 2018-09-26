@@ -1,15 +1,15 @@
 package com.example.ui;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import spark.Session;
 import spark.TemplateViewRoute;
-
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import com.example.appl.GameCenter;
 import com.example.model.GuessGame;
 
@@ -33,6 +33,10 @@ public class PostGuessRoute implements TemplateViewRoute {
   static final String BAD_GUESS = "Nope, try again...";
   static final String VIEW_NAME = "game_form.ftl";
 
+  //to manage user session stats
+  private static String sessionID;
+  private static List<String> sessions = new ArrayList<>();
+  private static Hashtable<String, Integer> gamesWonSession = new Hashtable<String, Integer>();
   //
   // Static methods
   //
@@ -94,6 +98,17 @@ public class PostGuessRoute implements TemplateViewRoute {
     // retrieve the game object
     final Session session = request.session();
     final GuessGame game = gameCenter.get(session);
+
+    //identify session ID
+    sessionID = request.session().id();
+
+    //If session is a new one, add it to the list
+    if (!sessions.contains(sessionID)) {
+      sessions.add(request.session().id());
+      //add the id to the hashmap and set games won = 0
+      gamesWonSession.put(request.session().id(), 0);
+    }
+
     vm.put(GetGameRoute.GAME_BEGINS_ATTR, game.isGameBeginning());
     vm.put(GetGameRoute.GUESSES_LEFT_ATTR, game.guessesLeft());
 
@@ -122,11 +137,14 @@ public class PostGuessRoute implements TemplateViewRoute {
 
     // did you win?
     if (correct) {
+      //increase the amount of games won by the session by 1
+      gamesWonSession.put(sessionID, gamesWonSession.get(sessionID) + 1);
       return youWon(vm, session);
     }
     // no, but you have more guesses?
     else if (game.hasMoreGuesses()) {
       vm.put(GetGameRoute.GUESSES_LEFT_ATTR, game.guessesLeft());
+      vm.put(GetGameRoute.HINT_ATTR_MSG, game.provideHint(guess));
       return error(vm, BAD_GUESS);
     }
     // otherwise, you lost
@@ -157,6 +175,7 @@ public class PostGuessRoute implements TemplateViewRoute {
     gameCenter.end(session);
     // report application-wide game statistics
     vm.put(GetHomeRoute.GAME_STATS_MSG_ATTR, gameCenter.getGameStatsMessage());
+    vm.put(GetHomeRoute.GAME_SESSION_AVG_STATS_ATTR, gameCenter.getGameAverageMessage(gamesWonSession.get(sessionID)));
     vm.put(YOU_WON_ATTR, youWon);
     return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
   }

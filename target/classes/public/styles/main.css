@@ -76,6 +76,11 @@ div.message.error {
     border: 1px solid #DD6F6F;
 }
 
+div.message.hint {
+    background: #C1FFA5;
+    border: 1px solid #58B82D;
+}
+
 div.message.success {
     background: #FAFFE4;
     border: 1px solid #DDFF6F;

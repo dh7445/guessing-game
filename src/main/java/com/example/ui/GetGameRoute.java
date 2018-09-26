@@ -23,6 +23,7 @@ public class GetGameRoute implements TemplateViewRoute {
   static final String GUESSES_LEFT_ATTR = "guessesLeft";
   static final String TITLE = "Number Guess Game";
   static final String VIEW_NAME = "game_form.ftl";
+  static final String HINT_ATTR_MSG = "hint";
 
   private final GameCenter gameCenter;
 
